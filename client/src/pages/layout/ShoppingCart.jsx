@@ -38,6 +38,8 @@ const ShoppingCart = ({ handleCartClick }) => {
     e.preventDefault();
     if (coupons[coupon]) {
       setDiscount(coupons[coupon]);
+    } else {
+      alert("Invalid coupon code");
     }
   };
 
@@ -86,8 +88,9 @@ const ShoppingCart = ({ handleCartClick }) => {
             <p className="text-xs text-stone-500 mt-4">Apply Discount Code</p>
             <div className="flex justify-between">
               <input
+                placeholder="NEWYEAR2024"
                 type="text"
-                className="w-2/3 mt-3 mr-6 border border-stone-300 py-2 rounded"
+                className="w-full p-2 mt-3 mr-6 border border-stone-300 py-2 rounded"
                 value={coupon}
                 onChange={(e) => {
                   return setCoupon(e.target.value);

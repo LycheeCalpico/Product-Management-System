@@ -27,9 +27,11 @@ const addToCart = async (req, res) => {
       await newCart.save();
     } else {
       const product = req.body.product.productID;
+      // const productStockQuantity = req.body.product.productQuantity;
       const item = cart.items.find((i) => i.product == product);
       if (item) {
         item.quantity += 1;
+        // update stock quantity in DB
       } else {
         cart.items.push({ product: product, quantity: 1 });
       }

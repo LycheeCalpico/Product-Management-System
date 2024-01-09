@@ -35,7 +35,7 @@ function App() {
           index
           element={isLoggedIn ? <ProductDisplayScreen /> : <HomePage />}
         /> */}
-        <Route index element={<HomePage />} />
+        <Route index element={<ProductDisplayScreen />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
@@ -43,6 +43,7 @@ function App() {
         <Route path="/product/:id" element={<ProductDetailPage />} />
         <Route path="/create-product" element={<ProductCreateScreen />} />
         <Route path="/edit-product/:id" element={<ProductCreateScreen />} />
+       
         <Route
           path="/display-product"
           element={
@@ -51,6 +52,7 @@ function App() {
             ///* </PrivateRoute> */
           }
         />
+
         <Route path="/checkout" element={<Dummy />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>

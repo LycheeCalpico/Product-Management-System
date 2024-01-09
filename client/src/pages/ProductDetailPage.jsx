@@ -7,12 +7,20 @@ import { Layout } from "antd";
 import { useParams, useNavigate } from "react-router-dom";
 import { getCurrentProduct } from "../services/productService";
 import { toggleEdit } from "../redux/editSlice";
+import { fetchCart } from "../redux/cart.slice";
 
 export default function ProductDetailPage() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const product = useSelector((state) => state.productItem);
-  const userInfo = JSON.parse(localStorage.getItem("user"));
+  const userInfo =
+    localStorage.getItem("user") == null
+      ? null
+      : JSON.parse(localStorage.getItem("user"));
+  const userAccess =
+    localStorage.getItem("user") == null
+      ? null
+      : JSON.parse(localStorage.getItem("user")).others.role;
   const edit = useSelector((state) => state.edit);
   const navigate = useNavigate();
   const handleEdit = () => {
@@ -22,7 +30,10 @@ export default function ProductDetailPage() {
 
   useEffect(() => {
     getCurrentProduct(id, dispatch);
+    if (userInfo)
+      dispatch(fetchCart(userInfo.others._id));
   }, [id, dispatch]);
+
 
   return (
     <Layout>
@@ -30,9 +41,9 @@ export default function ProductDetailPage() {
 
       <div className="flex flex-col w-screen h-screen items-center mb-12">
         <h2 className="w-[90%] mt-12 mb-6 text-3xl font-bold text-black xs:text-center md:text-left">
-          Products Detail
+          Product Details
         </h2>
-        <div className="xs:w-[80%] md:w-[90%] flex xs:flex-col md:flex-row bg-white shadow-lg items-center">
+        <div className="xs:w-[80%] md:w-[90%] h-[90%] flex xs:flex-col md:flex-row bg-white shadow-lg items-center">
           <div className="xs:mt-5 md:mt-0 xs:w-[90%] md:w-1/2 xs:h-[50%] md:h-[90%] xs:ml-0 md:ml-[5%] flex justify-center items-center">
             <img src={`${product.image}`} />
           </div>
@@ -64,14 +75,17 @@ export default function ProductDetailPage() {
                     productTitle: product.name,
                     productDescription: product.description,
                     productCategory: product.category,
+                    productImage: product.image,
                   }}
                 />
-                <button
-                  className="flex items-center justify-center w-1/2 text-base border border-[#6B7280] rounded-md ml-4 transition-colors duration-300 hover:bg-gray-300"
-                  onClick={handleEdit}
-                >
-                  Edit
-                </button>
+                {userAccess === "admin" && (
+                  <button
+                    className="flex items-center justify-center w-1/2 text-base border border-[#6B7280] rounded-md ml-4 transition-colors duration-300 hover:bg-gray-300"
+                    onClick={handleEdit}
+                  >
+                    Edit
+                  </button>
+                )}
               </div>
             </div>
           </div>

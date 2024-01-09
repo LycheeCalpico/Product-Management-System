@@ -7,6 +7,7 @@ import {
   selectCart,
 } from "../../../redux/cart.slice";
 import axios from "axios";
+import { updateCurrentProduct } from "../../../services/productService";
 
 const GroupButtons = (props) => {
   const dispatch = useDispatch();
@@ -17,10 +18,16 @@ const GroupButtons = (props) => {
     ? cart.find((item) => item.product._id === props.productData.productID)
         .quantity
     : 0;
+  const userID =
+    localStorage.getItem("user") == null
+      ? null
+      : JSON.parse(localStorage.getItem("user")).others._id;
+
   async function handleIncrement(data) {
-    const userID = JSON.parse(localStorage.getItem("user")).others._id;
-    // setCount(count + 1);
+    // TODO: Check quantity, increase quantity, and update stock quantity in DB
+
     dispatch(addToCart_(data));
+    //dispatch(updateCurrentProduct(data));
     try {
       await axios
         .post("/api/cart/add", {
@@ -37,7 +44,6 @@ const GroupButtons = (props) => {
   }
 
   const handleDecrement = async (data) => {
-    const userID = JSON.parse(localStorage.getItem("user")).others._id;
     if (count > 0) {
       // setCount(count - 1);
       dispatch(removeFromCart_(data));
@@ -59,40 +65,44 @@ const GroupButtons = (props) => {
   const displayCount = count > 0;
 
   return (
-    <Button.Group className="w-1/2">
-      {displayCount && (
-        <Button
-          className="border-none flex justify-center items-center focus:outline-none focus:shadow-outline text-white text-base bg-chuwa-blue transition-colors duration-300 hover:bg-gray-300"
-          onClick={() => handleDecrement(props.productData)}
-          disabled={count === 0}
-        >
-          -
-        </Button>
+    <div className="flex w-1/2">
+      {userID && (
+        <Button.Group className="w-full">
+          {displayCount && (
+            <Button
+              className="border-none flex justify-center items-center focus:outline-none focus:shadow-outline text-white text-base bg-chuwa-blue transition-colors duration-300 hover:bg-gray-300"
+              onClick={() => handleDecrement(props.productData)}
+              disabled={count === 0}
+            >
+              -
+            </Button>
+          )}
+          {displayCount && (
+            <div className="w-1/2 bg-chuwa-blue flex items-center justify-center text-white">
+              {count}
+            </div>
+          )}
+          {displayCount && (
+            <Button
+              className="flex justify-center items-center border-none focus:outline-none focus:shadow-outline text-white text-base bg-chuwa-blue transition-colors duration-300 hover:bg-gray-300"
+              onClick={() => handleIncrement(props.productData)}
+              disabled={count === 0}
+            >
+              +
+            </Button>
+          )}
+          {!displayCount && (
+            <Button
+              className="flex w-full justify-center items-center border-none focus:outline-none focus:shadow-outline text-white text-base bg-chuwa-blue transition-colors duration-300 hover:bg-gray-300 "
+              onClick={() => handleIncrement(props.productData)}
+              disabled={props.productData.productQuantity === 0}
+            >
+              Add
+            </Button>
+          )}
+        </Button.Group>
       )}
-      {displayCount && (
-        <div className="w-1/2 bg-chuwa-blue flex items-center justify-center text-white">
-          {count}
-        </div>
-      )}
-      {displayCount && (
-        <Button
-          className="flex justify-center items-center border-none focus:outline-none focus:shadow-outline text-white text-base bg-chuwa-blue transition-colors duration-300 hover:bg-gray-300"
-          onClick={() => handleIncrement(props.productData)}
-          disabled={count === 0}
-        >
-          +
-        </Button>
-      )}
-      {!displayCount && (
-        <Button
-          className="flex w-full justify-center items-center border-none focus:outline-none focus:shadow-outline text-white text-base bg-chuwa-blue transition-colors duration-300 hover:bg-gray-300 "
-          onClick={() => handleIncrement(props.productData)}
-          disabled={props.productData.productQuantity === 0}
-        >
-          Add
-        </Button>
-      )}
-    </Button.Group>
+    </div>
   );
 };
 

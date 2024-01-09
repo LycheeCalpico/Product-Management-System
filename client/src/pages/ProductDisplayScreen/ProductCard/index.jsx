@@ -16,13 +16,14 @@ const ProductCard = () => {
   const productsPerPage = 10;
   const startIndex = (currentPage - 1) * productsPerPage;
   const endIndex = startIndex + productsPerPage;
-  const displayedProducts = sort ? sortedProducts.slice(startIndex, endIndex) : products.slice(startIndex, endIndex);
+  const displayedProducts = sort
+    ? sortedProducts.slice(startIndex, endIndex)
+    : products.slice(startIndex, endIndex);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const userAccess = localStorage.getItem("user") == null ? null : JSON.parse(localStorage.getItem("user")).others.role;
 
-  useEffect(() => 
-    fetchAllProducts(dispatch),
-   []);
+  useEffect(() => fetchAllProducts(dispatch), []);
 
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
@@ -39,8 +40,7 @@ const ProductCard = () => {
       if (a._id < b._id) return 1;
       if (a._id > b._id) return -1;
       return 0;
-    }
-    );
+    });
   };
   const sortLowToHigh = () => {
     updateSortedProducts((a, b) => a.price - b.price);
@@ -49,7 +49,6 @@ const ProductCard = () => {
   const sortHighToLow = () => {
     updateSortedProducts((a, b) => b.price - a.price);
   };
-
 
   return (
     <div className="m-5">
@@ -70,12 +69,14 @@ const ProductCard = () => {
             </DropdownButton>
           </div>
           <div>
-            <button
-              className="hidden md:inline px-4 py-2 text-base bg-chuwa-blue hover:bg-gray-500 text-white justify-center items-center rounded focus:outline-none focus:shadow-outline"
-              onClick={() => navigate("/create-product")}
-            >
-              Add Product
-            </button>
+            {userAccess === "admin" && (
+              <button
+                className="hidden md:inline px-4 py-2 text-base bg-chuwa-blue hover:bg-gray-500 text-white justify-center items-center rounded focus:outline-none focus:shadow-outline"
+                onClick={() => navigate("/create-product")}
+              >
+                Add Product
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -83,15 +84,10 @@ const ProductCard = () => {
       <div className="flex flex-col bg-white rounded p-4">
         <div className="grid grid-flow-row gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
           {displayedProducts.map((product) => {
-            return (    
-            <ProductCardItem
-              key={product._id} 
-              product={product}        
-            />
-            );
-            })}
+            return <ProductCardItem key={product._id} product={product} />;
+          })}
         </div>
-        <div className="d-flex justify-content-end m-5">
+        <div className="flex justify-end xs:justify-center md:justify-end m-5">
           <PaginationBasic onPageChange={handlePageChange} />
         </div>
       </div>
