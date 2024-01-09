@@ -6,7 +6,7 @@ const {
   removeOneProductFromCart,
 } = require("../controllers/cart");
 const router = express.Router();
-router.get("/", getCart);
+router.get("/:userId", getCart);
 router.post("/add", addToCart);
 router.post("/remove", removeFromCart);
 router.post("/removeOne", removeOneProductFromCart);

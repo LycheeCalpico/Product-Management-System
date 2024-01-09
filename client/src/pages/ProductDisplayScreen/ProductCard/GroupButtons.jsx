@@ -9,13 +9,14 @@ import {
 import axios from "axios";
 import { updateCurrentProduct } from "../../../services/productService";
 
-const GroupButtons = (props) => {
+const GroupButtons = ({productData}) => {
+  console.log("product", productData);
   const dispatch = useDispatch();
   const cart = useSelector(selectCart);
   const count = cart.find(
-    (item) => item.product._id === props.productData.productID
+    (item) => item.product._id === productData._id
   )
-    ? cart.find((item) => item.product._id === props.productData.productID)
+    ? cart.find((item) => item.product._id ===productData._id)
         .quantity
     : 0;
   const userID =
@@ -23,13 +24,13 @@ const GroupButtons = (props) => {
       ? null
       : JSON.parse(localStorage.getItem("user")).others._id;
 
-  async function handleIncrement(data) {
-    dispatch(addToCart_(data));
+  async function handleIncrement() {
+    dispatch(addToCart_());
     //dispatch(updateCurrentProduct(data));
     try {
       await axios
         .post("/api/cart/add", {
-          product: data,
+          product: productData,
           quantity: 1,
           userID: userID,
         })
@@ -41,14 +42,14 @@ const GroupButtons = (props) => {
     }
   }
 
-  const handleDecrement = async (data) => {
+  const handleDecrement = async () => {
     if (count > 0) {
       // setCount(count - 1);
-      dispatch(removeFromCart_(data));
+      dispatch(removeFromCart_());
       try {
         await axios
           .post("/api/cart/remove", {
-            product: data,
+            product: productData,
             userID: userID,
           })
           .then((response) => {
@@ -69,7 +70,7 @@ const GroupButtons = (props) => {
           {displayCount && (
             <Button
               className="border-none flex justify-center items-center focus:outline-none focus:shadow-outline text-white text-base bg-chuwa-blue transition-colors duration-300 hover:bg-gray-300"
-              onClick={() => handleDecrement(props.productData)}
+              onClick={() => handleDecrement()}
               disabled={count === 0}
             >
               -
@@ -83,8 +84,8 @@ const GroupButtons = (props) => {
           {displayCount && (
             <Button
               className="flex justify-center items-center border-none focus:outline-none focus:shadow-outline text-white text-base bg-chuwa-blue transition-colors duration-300 hover:bg-gray-300"
-              onClick={() => handleIncrement(props.productData)}
-              disabled={count >= props.productData.productQuantity}
+              onClick={() => handleIncrement()}
+              disabled={count >= productData.stockQuantity}
             >
               +
             </Button>
@@ -92,8 +93,8 @@ const GroupButtons = (props) => {
           {!displayCount && (
             <Button
               className="flex w-full justify-center items-center border-none focus:outline-none focus:shadow-outline text-white text-base bg-chuwa-blue transition-colors duration-300 hover:bg-gray-300 "
-              onClick={() => handleIncrement(props.productData)}
-              disabled={props.productData.productQuantity === 0}
+              onClick={() => handleIncrement()}
+              disabled={productData.stockQuantity === 0}
             >
               Add
             </Button>

@@ -47,14 +47,9 @@ const ProductCardItem = ({ product }) => {
         {userInfo && (
           <Flex gap="small">
             <GroupButtons
-              productData={{
-                productID: product._id,
-                productPrice: product.price,
-                productQuantity: product.stockQuantity,
-                productTitle: product.name,
-                productDescription: product.description,
-                productCategory: product.category,
-              }}
+              productData = {product}
+              
+        
             />
             {userAccess === "admin" && (
               <button
