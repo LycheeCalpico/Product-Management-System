@@ -19,6 +19,7 @@ export default function CartItem({ product, quantity }) {
     stockQuantity,
   } = product;
   const dispatch = useDispatch();
+  
   async function handleIncrement(data) {
     const userID = JSON.parse(localStorage.getItem("user")).others._id;
     dispatch(addToCart_(data));
@@ -108,16 +109,17 @@ export default function CartItem({ product, quantity }) {
             <div
               className="font-light text-sm text-grey-500"
               onClick={(e) => {
-                return handleIncrement({
-                  productID: _id,
-                  productDate: Date,
-                  productPrice: price,
-                  productQuantity: stockQuantity,
-                  productTitle: name,
-                  productImage: image,
-                  productDescription: description,
-                  productCategory: category,
-                });
+                if (quantity < stockQuantity)
+                  return handleIncrement({
+                    productID: _id,
+                    productDate: Date,
+                    productPrice: price,
+                    productQuantity: stockQuantity,
+                    productTitle: name,
+                    productImage: image,
+                    productDescription: description,
+                    productCategory: category,
+                  });
               }}
             >
               +

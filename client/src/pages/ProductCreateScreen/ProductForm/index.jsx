@@ -57,7 +57,7 @@ const ProductForm = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container mb-5">
       <h1 className="title mb-4 text-center">Create Product</h1>
 
       <Form className="form-field">

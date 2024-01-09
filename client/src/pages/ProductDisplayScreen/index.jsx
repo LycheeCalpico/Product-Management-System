@@ -18,7 +18,7 @@ const ProductDisplayScreen = () => {
     if (userInfo) dispatch(fetchCart(userInfo.others._id));
   }, []);
   return (
-    <Layout>
+    <Layout className="min-h-screen justify-between">
       <Header userInfo={userInfo} />
       <ProductCard />
       <Footer />

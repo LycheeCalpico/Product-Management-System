@@ -2,9 +2,12 @@ import Header from "./layout/Header";
 import Footer from "./layout/Footer";
 import { Layout } from "antd";
 const { Content } = Layout;
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 export default function ErrorPage() {
-  const userInfo = JSON.parse(localStorage.getItem("user"));
+  const userInfo = JSON.parse(localStorage.getItem("user"))
+    ? JSON.parse(localStorage.getItem("user"))
+    : null;
   const navigate = useNavigate();
   const handleClick = () => {
     navigate(`/`);

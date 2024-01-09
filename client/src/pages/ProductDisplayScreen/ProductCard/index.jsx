@@ -21,7 +21,10 @@ const ProductCard = () => {
     : products.slice(startIndex, endIndex);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const userAccess = localStorage.getItem("user") == null ? null : JSON.parse(localStorage.getItem("user")).others.role;
+  const userAccess =
+    localStorage.getItem("user") == null
+      ? null
+      : JSON.parse(localStorage.getItem("user")).others.role;
 
   useEffect(() => fetchAllProducts(dispatch), []);
 
@@ -51,7 +54,7 @@ const ProductCard = () => {
   };
 
   return (
-    <div className="m-5">
+    <div className="flex flex-col m-20 mb-auto">
       <div className="grid grid-rows-1 grid-cols-2 xs:grid-rows-2 xs:grid-cols-1 md:grid-rows-1 md:grid-cols-2 mb-4 gap-y-3">
         <p className="flex text-3xl font-bold xs:justify-center md:justify-start">
           Products
@@ -68,26 +71,33 @@ const ProductCard = () => {
               </Dropdown.Item>
             </DropdownButton>
           </div>
-          <div>
-            {userAccess === "admin" && (
+
+          {userAccess === "admin" && (
+            <div>
               <button
-                className="hidden md:inline px-4 py-2 text-base bg-chuwa-blue hover:bg-gray-500 text-white justify-center items-center rounded focus:outline-none focus:shadow-outline"
+                className="lg:hidden px-4 py-2 text-base bg-chuwa-blue hover:bg-gray-500 text-white justify-center items-center rounded focus:outline-none focus:shadow-outline"
+                onClick={() => navigate("/create-product")}
+              >
+                Add
+              </button>
+              <button
+                className="hidden lg:inline px-4 py-2 text-base bg-chuwa-blue hover:bg-gray-500 text-white justify-center items-center rounded focus:outline-none focus:shadow-outline"
                 onClick={() => navigate("/create-product")}
               >
                 Add Product
-              </button>
-            )}
-          </div>
+              </button>{" "}
+            </div>
+          )}
         </div>
       </div>
 
-      <div className="flex flex-col bg-white rounded p-4">
-        <div className="grid grid-flow-row gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+      <div className="flex flex-col rounded">
+        <div className=" bg-white p-6 grid grid-flow-row gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
           {displayedProducts.map((product) => {
             return <ProductCardItem key={product._id} product={product} />;
           })}
         </div>
-        <div className="flex justify-end xs:justify-center md:justify-end m-5">
+        <div className="flex justify-end xs:justify-center md:justify-end my-6">
           <PaginationBasic onPageChange={handlePageChange} />
         </div>
       </div>

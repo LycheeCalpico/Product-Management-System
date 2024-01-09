@@ -59,7 +59,7 @@ const EditProduct = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container mb-5">
       <h1 className="title mb-4 text-center">Edit Product</h1>
 
       <Form className="form-field">

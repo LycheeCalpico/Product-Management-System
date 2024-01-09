@@ -24,8 +24,6 @@ const GroupButtons = (props) => {
       : JSON.parse(localStorage.getItem("user")).others._id;
 
   async function handleIncrement(data) {
-    // TODO: Check quantity, increase quantity, and update stock quantity in DB
-
     dispatch(addToCart_(data));
     //dispatch(updateCurrentProduct(data));
     try {
@@ -86,7 +84,7 @@ const GroupButtons = (props) => {
             <Button
               className="flex justify-center items-center border-none focus:outline-none focus:shadow-outline text-white text-base bg-chuwa-blue transition-colors duration-300 hover:bg-gray-300"
               onClick={() => handleIncrement(props.productData)}
-              disabled={count === 0}
+              disabled={count >= props.productData.productQuantity}
             >
               +
             </Button>

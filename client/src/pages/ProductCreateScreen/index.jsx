@@ -4,7 +4,7 @@ import Footer from "../layout/Footer";
 import ProductForm from "./ProductForm";
 import EditProduct from "./ProductForm/EditProduct";
 import "./ProductForm/product.css";
-import { Layout} from "antd";
+import { Layout } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 const { Content, Sider } = Layout;
 
@@ -16,10 +16,10 @@ const ProductCreateScreen = () => {
   const userInfo = JSON.parse(localStorage.getItem("user"));
 
   const edit = useSelector((state) => state.edit);
-  
+
   return (
-    <Layout style={{ height: "100vh" }}>
-      <Header userInfo={userInfo}/>
+    <Layout className="flex flex-col min-h-screen justify-between bg-gray-50">
+      <Header userInfo={userInfo} />
       <Layout>
         <Sider
           width="27%"
@@ -30,8 +30,7 @@ const ProductCreateScreen = () => {
         ></Sider>
         <Content style={siderStyle}>
           {!edit && <ProductForm />}
-          {edit && <EditProduct /> }
-
+          {edit && <EditProduct />}
         </Content>
         <Sider
           width="27%"
@@ -41,7 +40,7 @@ const ProductCreateScreen = () => {
           trigger={null}
         ></Sider>
       </Layout>
-      <Footer/>
+      <Footer />
     </Layout>
   );
 };
